@@ -2,13 +2,12 @@ Python Project generating pytest hook flow chart documentation
 
 
 * Free software: MIT license
-* Documentation: https://doc-pytest-flow-chart.readthedocs.io.
 
 
 Features
 --------
 
-* TODO
+* Generation of pytest hook flow diagram
 
 Credits
 -------

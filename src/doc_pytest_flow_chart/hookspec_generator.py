@@ -1,3 +1,7 @@
+""" Generates a dummy implementation for all pytest hooks as found
+in pytest hookspec.
+"""
+
 import _pytest.hookspec as hs
 import inspect
 

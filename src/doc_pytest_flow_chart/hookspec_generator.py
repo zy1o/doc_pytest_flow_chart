@@ -1,7 +1,6 @@
 import _pytest.hookspec as hs
 import inspect
-from typing import Union
-import pathlib
+
 
 def get_hooks() -> list:
     """ Returns a list of pytest hooks"""
@@ -19,8 +18,7 @@ def get_hook_implementation(hook_name: str) -> str:
     args_dict = inspect.signature(hookspec_item).parameters
 
     str_args = ", ".join([arg for arg in args_dict]).strip(",")
-    hook_impl_str = \
-        f"""
+    hook_impl_str = f"""
 @pytest.hookimpl()
 def {hook_name}({str_args}):
     with open("hooks_order.txt", "a+") as hooks_file:

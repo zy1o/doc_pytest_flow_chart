@@ -3,12 +3,12 @@ import inspect
 
 
 def get_hooks() -> list:
-    """ Returns a list of pytest hooks"""
+    """Returns a list of pytest hooks"""
     return [hook for hook in dir(hs) if hook.startswith("pytest_")]
 
 
 def get_hook_implementation(hook_name: str) -> str:
-    """ Returns string with code (implementation) for a given hook
+    """Returns string with code (implementation) for a given hook
     name. Each implementation opens a text file and appends data
     with information on the hook"""
 
@@ -29,13 +29,12 @@ def {hook_name}({str_args}):
 
 
 def get_conftest_file() -> str:
-    """ Returns contents of a conftest.py with all hooks
-    implemented """
+    """Returns contents of a conftest.py with all hooks
+    implemented"""
     all_hooks = get_hooks()
 
     conftest_content = "import pytest\n\n"
     for hook in all_hooks:
         conftest_content += get_hook_implementation(hook)
-    
-    return conftest_content
 
+    return conftest_content

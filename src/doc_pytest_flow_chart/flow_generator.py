@@ -44,7 +44,7 @@ def get_flow_chart():
     dot.attr("node", shape="rect", width="5", ordering="out")
 
     for h in unique_hooks:
-        dot.node(h, label=h, href=f"https://docs.pytest.org/en/6.2.x/reference.html#pytest.hookspec.{h}")
+        dot.node(h, label=h, href=f"https://docs.pytest.org/en/6.2.x/reference.html#pytest.hookspec.{h}", target="_blank")
     
     for edge_begin, edge_end in zip(hook_order, hook_order[1:]):
         dot.edge(edge_begin, edge_end)

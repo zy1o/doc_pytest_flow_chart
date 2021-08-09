@@ -49,7 +49,7 @@ def get_flow_chart():
     for edge_begin, edge_end in zip(hook_order, hook_order[1:]):
         dot.edge(edge_begin, edge_end)
 
-    dot.render("graph.svg", format="svg", view=True)
+    dot.render("graph", format="svg", view=True)
 
 
 if __name__ == "__main__":

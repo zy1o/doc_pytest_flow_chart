@@ -109,8 +109,7 @@ VERSION.txt
 
 # generated files
 hooks_order.txt
-graph.svg
-graph.svg.svg
+graph*
 src/doc_pytest_flow_chart/dummy_test_project/conftest.py
 src/doc_pytest_flow_chart/dummy_test_project/hooks_order.txt
 src/doc_pytest_flow_chart/hooks_order.txt

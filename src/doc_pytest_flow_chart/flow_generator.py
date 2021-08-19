@@ -1,7 +1,7 @@
 import pathlib
 import subprocess
 
-from typing import Union
+from typing import Union, Callable
 import graphviz
 from doc_pytest_flow_chart import hookspec_generator
 
@@ -34,23 +34,39 @@ def execute_pytest() -> subprocess.CompletedProcess:
 
 def load_hook_order_file() -> list[str]:
     """Reads out the hook order from a text file. The file name is hardcoded
-    to match the name hardcoded in the project"""
+    to match the name hardcoded in the project.
+    """
     with open("hooks_order.txt", "rt") as hooks:
         data = hooks.read()
 
     return data.splitlines()
 
 
+def load_pytest_hook_debug() -> list[str]:
+    """ Loads pytest debug log file and extracts hook from the pytest debug
+    log file.
+    """
+    with open("pytestdebug.log", "rt") as pytest_debug_file:
+        data = pytest_debug_file.read()
+
+    hooks_list = []
+    for line in data.splitlines():
+         if "hook" in line and "finish" not in line:
+             hooks_list.append(line.rstrip("[hook]").strip())
+
+
 def get_flow_chart_file(
     out_filename: Union[pathlib.Path, str],
+    load_function: Callable = load_hook_order_file, 
     documentation_url: str = "https://docs.pytest.org/en/latest/reference.html#pytest.hookspec",
     hook_filter: set = None,
 ) -> None:
     """Renders aflow chart for selected hooks to a .svg file. The resulting
     .svg contains links to the latest version of the pytest documentation.
     This isn't great as the documentation might get outdated or modified resulting
-    with non functional links."""
-    hook_order = load_hook_order_file()
+    with non functional links.
+    """
+    hook_order = load_function()
 
     # using a set so that each hook appears once
     unique_hooks = set(hook_order)
@@ -75,9 +91,3 @@ def get_flow_chart_file(
         dot.edge(edge_begin, edge_end)
 
     dot.render(str(out_filename), format="svg")
-
-
-def get_flow_chart_pluggy(hook_filter: set = None) -> None:
-    """Renders aflow chart for selected hooks to a .svg file based on
-    the pluggy output."""
-    pass

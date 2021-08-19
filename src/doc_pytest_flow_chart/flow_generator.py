@@ -1,5 +1,7 @@
 import pathlib
 import subprocess
+
+from typing import Union
 import graphviz
 from doc_pytest_flow_chart import hookspec_generator
 
@@ -39,7 +41,11 @@ def load_hook_order_file() -> list[str]:
     return data.splitlines()
 
 
-def get_flow_chart_file(hook_filter: set = None) -> None:
+def get_flow_chart_file(
+    out_filename: Union[pathlib.Path, str],
+    documentation_url: str = "https://docs.pytest.org/en/latest/reference.html#pytest.hookspec",
+    hook_filter: set = None,
+) -> None:
     """Renders aflow chart for selected hooks to a .svg file. The resulting
     .svg contains links to the latest version of the pytest documentation.
     This isn't great as the documentation might get outdated or modified resulting
@@ -57,18 +63,18 @@ def get_flow_chart_file(hook_filter: set = None) -> None:
     dot = graphviz.Digraph(format="gv", strict=True)
     dot.attr("node", shape="rect", width="5", ordering="out")
 
-    for h in unique_hooks:
+    for hook in unique_hooks:
         dot.node(
-            h,
-            label=h,
-            href=f"https://docs.pytest.org/en/latest/reference.html#pytest.hookspec.{h}",
+            hook,
+            label=hook,
+            href=f"{documentation_url}.{hook}",
             target="_blank",
         )
 
     for edge_begin, edge_end in zip(hook_order, hook_order[1:]):
         dot.edge(edge_begin, edge_end)
 
-    dot.render("graph.svg", format="svg")
+    dot.render(str(out_filename), format="svg")
 
 
 def get_flow_chart_pluggy(hook_filter: set = None) -> None:

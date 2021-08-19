@@ -25,7 +25,14 @@ def execute_pytest() -> subprocess.CompletedProcess:
     current_dir = pathlib.Path(__file__).parent
     test_project_root = current_dir / "dummy_test_project"
     cproc = subprocess.run(
-        ["pytest", str(test_project_root), "-vs", "--debug"],
+        [
+            "pytest",
+            str(test_project_root),
+            "-vs",
+            "--debug",
+            "-k",
+            "not test_to_be_deselected"
+        ],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     )
@@ -43,7 +50,7 @@ def load_hook_order_file() -> list[str]:
 
 
 def load_pytest_hook_debug() -> list[str]:
-    """ Loads pytest debug log file and extracts hook from the pytest debug
+    """Loads pytest debug log file and extracts hook from the pytest debug
     log file.
     """
     with open("pytestdebug.log", "rt") as pytest_debug_file:
@@ -51,13 +58,14 @@ def load_pytest_hook_debug() -> list[str]:
 
     hooks_list = []
     for line in data.splitlines():
-         if "hook" in line and "finish" not in line:
-             hooks_list.append(line.rstrip("[hook]").strip())
+        if "hook" in line and "finish" not in line:
+            hooks_list.append(line.rstrip("[hook]").strip())
+    return hooks_list
 
 
 def get_flow_chart_file(
     out_filename: Union[pathlib.Path, str],
-    load_function: Callable = load_hook_order_file, 
+    load_function: Callable = load_hook_order_file,
     documentation_url: str = "https://docs.pytest.org/en/latest/reference.html#pytest.hookspec",
     hook_filter: set = None,
 ) -> None:
@@ -77,7 +85,7 @@ def get_flow_chart_file(
         hook_order = [h for h in hook_order if h in hook_filter]
 
     dot = graphviz.Digraph(format="gv", strict=True)
-    dot.attr("node", shape="rect", width="5", ordering="out")
+    dot.attr("node", shape="rect", width="5", ordering="out", rankdir="LR", rank="same")
 
     for hook in unique_hooks:
         dot.node(

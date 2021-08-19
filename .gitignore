@@ -105,3 +105,12 @@ ENV/
 .vscode/
 
 VERSION.txt
+
+
+# generated files
+src/doc_pytest_flow_chart/dummy_test_project/conftest.py
+src/doc_pytest_flow_chart/dummy_test_project/hooks_order.txt
+src/doc_pytest_flow_chart/hooks_order.txt
+src/doc_pytest_flow_chart/pytestdebug.txt
+src/doc_pytest_flow_chart/dummy_test_project/hook_*.txt
+src/doc_pytest_flow_chart/dummy_test_project/pytestdebug.txt

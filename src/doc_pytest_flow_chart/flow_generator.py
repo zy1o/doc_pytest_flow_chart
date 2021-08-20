@@ -1,5 +1,6 @@
 import pathlib
 import subprocess
+import os
 
 from typing import Union, Callable
 import graphviz
@@ -22,6 +23,7 @@ def execute_pytest() -> subprocess.CompletedProcess:
     In addtion, pytest is launched with ``--debug`` flag, so that
     the hook order is also available with a pluggy feature.
     """
+    os.remove("hooks_order.txt")
     current_dir = pathlib.Path(__file__).parent
     test_project_root = current_dir / "dummy_test_project"
     cproc = subprocess.run(

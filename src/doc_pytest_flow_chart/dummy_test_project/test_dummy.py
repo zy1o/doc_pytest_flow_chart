@@ -21,11 +21,11 @@ def fixture_finalizer(request):
 
 
 @pytest.mark.parametrize("param1", range(5))
-def test_me_one(param1):
+def test_me_one(param1, fixture_yield):
     assert True
 
 
-def test_fail_intentionally():
+def test_fail_intentionally(fixture_finalizer):
     assert False
 
 

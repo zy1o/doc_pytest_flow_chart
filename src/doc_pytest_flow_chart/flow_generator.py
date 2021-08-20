@@ -76,12 +76,15 @@ def get_flow_chart_file(
     """
     hook_order = load_function()
 
-    # using a set so that each hook appears once
-    unique_hooks = set(hook_order)
+    # not using a simple set here to preserve hook order
+    unique_hooks = []
+    for hook in hook_order:
+        if hook not in unique_hooks:
+            unique_hooks.append(hook)
 
     # optional filtering
     if hook_filter:
-        unique_hooks = unique_hooks & hook_filter
+        unique_hooks = [hook for hook in unique_hooks if hook in hook_filter]
         hook_order = [h for h in hook_order if h in hook_filter]
 
     dot = graphviz.Digraph(format="gv", strict=True)
@@ -95,7 +98,10 @@ def get_flow_chart_file(
             target="_blank",
         )
 
+    edges = [] # contains tuples with beginning and end
     for edge_begin, edge_end in zip(hook_order, hook_order[1:]):
-        dot.edge(edge_begin, edge_end)
+        if (edge_begin, edge_end) not in edges:
+            edges.append((edge_begin, edge_end))
+            dot.edge(edge_begin, edge_end)
 
     dot.render(str(out_filename), format="svg")
